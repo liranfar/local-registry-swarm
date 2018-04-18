@@ -25,13 +25,11 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
   2. Init swarm on `master` and join workers:
 
     * Assuming `master` ip is 192.168.99.100
-
       ```
       docker-machine ssh master \
       docker swarm init --advertise-addr 192.168.99.100
       ```
     * copy the output from `init` command and run it using`ssh` to **each** worker as follows:
-
     ```
     docker-machine worker-1 \
   	ssh <the output from init swarm>
@@ -45,28 +43,27 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
   in order to connect to Docker Engine in `master`.
 
    * deploy visualization service:
-
-    ```
-    docker service create \
-    --name=viz \
-	  --publish=8080:8080 \
-	  --constraint=node.role==manager \
-	  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
-	  --detach=true \
-	  dockersamples/visualizer
-    ```
+   ```
+   docker service create \
+   --name=viz \
+	 --publish=8080:8080 \
+	 --constraint=node.role==manager \
+	 --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+	 --detach=true \
+	 dockersamples/visualizer
+   ```
 
   4. Generate self-signed certificate
 
     * run
-      ```
+    ```
     openssl req -newkey rsa:4096 -nodes -sha256 \
     -keyout registry.key -x509 -days 365 \
     -out registry.crt
-      ```
+    ```
     * You can safely ignore the questions afterwards **except** the   Common-Name. Type any local URL you wish, in this example it is going to be
     ```
-      myregistry.com
+    myregistry.com
     ```
 
   5. Force Docker to trust self-signed certificate
@@ -84,12 +81,11 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
       `docker-machine ssh <machine_name> sudo mv /home/docker/registry.crt /etc/docker/certs.d/myregistry.com:5000/ca.crt`
 
     * All together :
-
-      ```
-      docker-machine scp registry.crt master:/home/docker/ && \
-      docker-machine ssh <machine_name> sudo mkdir -p /etc/docker/certs.d/myregistry.com:5000 && \
-      docker-machine ssh <machine_name> sudo mv /home/docker/registry.crt /etc/docker/certs.d/myregistry.com:5000/ca.crt
-      ```
+    ```
+    docker-machine scp registry.crt master:/home/docker/ && \
+    docker-machine ssh <machine_name> sudo mkdir -p /etc/docker/certs.d/myregistry.com:5000 && \
+    docker-machine ssh <machine_name> sudo mv /home/docker/registry.crt /etc/docker/certs.d/myregistry.com:5000/ca.crt
+    ```
 
   6. Configure local DNS on /etc/hosts to recognize `myregistry.com` on **each** machine in the swarm :
 
@@ -101,24 +97,22 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
       ```
 
   7. Copy the generated certificate to `master` :
-
-    ```
-    docker-machine scp registry.crt master:/home/docker/ && \
-    docker-machine scp registry.key master:/home/docker/
-    ```
+  ```
+  docker-machine scp registry.crt master:/home/docker/ && \
+  docker-machine scp registry.key master:/home/docker/
+  ```
 
   8. Create the registry service on `master` :
-
-    ```
-    docker service create --name registry --publish=5000:5000 \
- --constraint=node.role==manager \
- --mount=type=bind,src=/home/docker,dst=/certs \
- -e REGISTRY_HTTP_ADDR=0.0.0.0:5000 \
- -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
- -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
- registry:latest
-    ```
-    Make sure the service appears on the visualizer ( browser 192.168.99.100:8080 )
+  ```
+  docker service create --name registry --publish=5000:5000 \
+  --constraint=node.role==manager\
+  --mount=type=bind,src=/home/docker,dst=/certs \
+  -e REGISTRY_HTTP_ADDR=0.0.0.0:5000 \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
+  registry:latest
+  ```
+  Make sure the service appears on the visualizer ( browser 192.168.99.100:8080 )
 
   9. Build your own image with `myregistry.com:5000/<repository>:<tag>` format. For example :
 
@@ -132,11 +126,10 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
     `curl -k -X GET https://myregistry.com:5000/v2/_catalog`
 
   12. Create, run and scale your service :
-
-    ```
-    docker service create --name=node-server myregistry.com:5000/server
-    docker service scale node-server=3
-    ```
+  ```
+  docker service create --name=node-server myregistry.com:5000/server
+  docker service scale node-server=3
+  ```
   13. Notice for any change on the visualizer and you will see the new added services distributed on all nodes.
 
 
