@@ -13,9 +13,9 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
 ## Steps
 
 1. Create machines for a swarm:
-* `docker-machine create master`
-* `docker-machine create worker-1`
-* `docker-machine create worker-2`
+  * `docker-machine create master`
+  * `docker-machine create worker-1`
+  * `docker-machine create worker-2`
 
     * and so on..
 
