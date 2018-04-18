@@ -12,13 +12,10 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
 
 ## Steps
 
-  1. Create machines for a swarm:
-
-    * `docker-machine create master`
-
-    * `docker-machine create worker-1`
-
-    * `docker-machine create worker-2`
+1. Create machines for a swarm:
+* `docker-machine create master`
+* `docker-machine create worker-1`
+* `docker-machine create worker-2`
 
     * and so on..
 
@@ -89,7 +86,7 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
 
   6. Configure local DNS on /etc/hosts to recognize `myregistry.com` on **each** machine in the swarm :
 
-    * Assuming 192.168.99.100 is the master ip, run
+  * Assuming 192.168.99.100 is the master ip, run
       ```
       docker-machine ssh <machine_name>
       sudo sh -c "echo ' 192.168.99.100 myregistry.com' >> /etc/hosts"
