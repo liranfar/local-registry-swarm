@@ -16,11 +16,11 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
 
     * `docker-machine create master`
 
-    * `docker-machine create worker-1`    
+    * `docker-machine create worker-1`
 
     * `docker-machine create worker-2`
 
-    * and so on..    
+    * and so on..
 
   2. Init swarm on `master` and join workers:
 
@@ -30,11 +30,12 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
       docker-machine ssh master \
       docker swarm init --advertise-addr 192.168.99.100
       ```
-    * copy the output from `init` command and run it using `ssh` to **each** worker as follows:
-  ```
-  docker-machine worker-1 \
-  				ssh <the output from init swarm>
-  ```
+    * copy the output from `init` command and run it using`ssh` to **each** worker as follows:
+
+    ```
+    docker-machine worker-1 \
+  	ssh <the output from init swarm>
+    ```
   3. Install visualizer in `master` ( not a must but highly recommended )
 
     * run
@@ -44,14 +45,15 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
   in order to connect to Docker Engine in `master`.
 
    * deploy visualization service:
+
     ```
     docker service create \
-	--name=viz \
-	--publish=8080:8080 \
-	--constraint=node.role==manager \
-	--mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
-	--detach=true \
-	dockersamples/visualizer
+    --name=viz \
+	  --publish=8080:8080 \
+	  --constraint=node.role==manager \
+	  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+	  --detach=true \
+	  dockersamples/visualizer
     ```
 
   4. Generate self-signed certificate
@@ -138,4 +140,4 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
   13. Notice for any change on the visualizer and you will see the new added services distributed on all nodes.
 
 
-**That's it :)** 
+**That's it :)**
