@@ -52,15 +52,17 @@ Current [Getting-Started] Docker documentation is depended on the public docker 
     -out registry.crt
     ```
     * You can safely ignore the questions afterwards **except** the   Common-Name. Type any local URL you wish, in this example it is going to be
-    ```
+    `
     myregistry.com
-    ```
+    `
 5. Force Docker to trust self-signed certificate
     * Copy registry.crt file to `master` :
     `docker-machine scp registry.crt master:/home/docker/`
     * Create a folder for the certificate on **each** machine in the swarm :
+
     `docker-machine ssh <machine_name> sudo mkdir -p /etc/docker/certs.d/myregistry.com:5000`
     * rename `registry.crt` to  `ca.crt` and move in into the underline folder :
+
     `docker-machine ssh <machine_name> sudo mv /home/docker/registry.crt /etc/docker/certs.d/myregistry.com:5000/ca.crt`
     * All together :
     ```
@@ -88,6 +90,7 @@ docker service create --name registry --publish=5000:5000 \
 -e REGISTRY_HTTP_ADDR=0.0.0.0:5000 \
 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
 -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
+--detach=true \
 registry:latest
 ```
 Make sure the service appears on the visualizer ( browser 192.168.99.100:8080 )
