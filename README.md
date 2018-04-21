@@ -85,13 +85,12 @@ docker-machine scp registry.key master:/home/docker/
 8. Create the registry service on `master` :
 ```
 docker service create --name registry --publish=5000:5000 \
---constraint=node.role==manager\
---mount=type=bind,src=/home/docker,dst=/certs \
--e REGISTRY_HTTP_ADDR=0.0.0.0:5000 \
--e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
--e REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
---detach=true \
-registry:latest
+ --constraint=node.role==manager \
+ --mount=type=bind,src=/home/docker,dst=/certs \
+ -e REGISTRY_HTTP_ADDR=0.0.0.0:5000 \
+ -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
+ -e REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
+ registry:latest
 ```
 Make sure the service appears on the visualizer ( browser 192.168.99.100:8080 )
 
